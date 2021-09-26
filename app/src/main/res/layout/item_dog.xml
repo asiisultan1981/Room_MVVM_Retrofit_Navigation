@@ -1,42 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="125dp"
-    android:id="@+id/dogLayout"
-    android:orientation="horizontal"
-    android:layout_marginBottom="8dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="dog"
+            type="com.asii.room_mvvm_retrofit.model.Dog" />
+<!--        For item clicked Following steps to be done:
+    1. we define a new variable "listener
+    and type will be the class/ interface "ClickHandler"
+    2. Also as we know that for going to detail fragment
+   we need dog uuid whcih have to be declared here in the
+   form of TextView so we ll take a new TextView
+   3. In the LinearLayout we have to declare onClick
+   for the listener-->
 
+        <variable
+            name="listener"
+            type="com.asii.room_mvvm_retrofit.view.ClickListener" />
+        
+    </data>
 
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:src="@mipmap/ic_dog_icon_round"/>
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:layout_gravity="center_vertical"
-        android:orientation="vertical"
-        android:padding="4dp"
-        android:gravity="center_vertical">
+        android:id="@+id/dogLayout"
+        android:layout_width="match_parent"
+        android:layout_height="125dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal"
+        android:onClick="@{listener :: onDogClick}">
 
         <TextView
-            android:id="@+id/name"
+            android:id="@+id/dogId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/TextAppearance.AppCompat.Title"
-            android:text="Dog Name"/>
+            android:visibility="gone"
+            android:text="@{String.valueOf(dog.uuid)}"/>
 
-        <TextView
-            android:id="@+id/lifespan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/TextAppearance.AppCompat.Title"
-            android:text="dog lifespan"/>
+
+
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:imageUrl="@{dog.imageUrl}"
+            android:src="@mipmap/ic_dog_icon_round" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="3"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="4dp">
+
+            <TextView
+                android:id="@+id/name"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{dog.dogBreed}" />
+
+            <TextView
+                android:id="@+id/lifespan"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{dog.lifeSpan}" />
+
+        </LinearLayout>
 
     </LinearLayout>
-
-</LinearLayout>
+</layout>

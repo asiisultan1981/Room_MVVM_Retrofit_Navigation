@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.asii.room_mvvm_retrofit.R;
+import com.asii.room_mvvm_retrofit.databinding.FragmentListBinding;
 import com.asii.room_mvvm_retrofit.model.Dog;
 import com.asii.room_mvvm_retrofit.viewmodel.ListViewModel;
 
@@ -26,22 +27,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class ListFragment extends Fragment implements DogsListAdapter.ClickHandler{
+public class ListFragment extends Fragment {
+    FragmentListBinding binding;
+
     private ListViewModel listViewModel;
-    private DogsListAdapter adapter = new DogsListAdapter(new ArrayList<>(), this);
-
-    @BindView(R.id.recyclerView_dogsList)
-    RecyclerView recyclerView;
-
-    @BindView(R.id.tv_listError)
-    TextView tv_listError;
-
-    @BindView(R.id.progressBar_loadingView)
-    ProgressBar progressBar_loadingView;
-
-    @BindView(R.id.refreshLayout)
-    SwipeRefreshLayout refreshLayout;
-
+    private DogsListAdapter adapter = new DogsListAdapter(new ArrayList<>());
 
     public ListFragment() {
 
@@ -50,72 +40,57 @@ public class ListFragment extends Fragment implements DogsListAdapter.ClickHandl
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_list, container, false);
-        ButterKnife.bind(this,view);
-
-              return view;
+        binding = FragmentListBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(View view,  Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         listViewModel = new ViewModelProvider.AndroidViewModelFactory(this.getActivity()
                 .getApplication())
                 .create(ListViewModel.class);
         listViewModel.refresh();
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        recyclerView.setAdapter(adapter);
+        binding.recyclerViewDogsList.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+        binding.recyclerViewDogsList.setAdapter(adapter);
 
-        refreshLayout.setOnRefreshListener(() -> {
-            recyclerView.setVisibility(View.GONE);
-            tv_listError.setVisibility(View.GONE);
-            progressBar_loadingView.setVisibility(View.VISIBLE);
+        binding.refreshLayout.setOnRefreshListener(() -> {
+            binding.recyclerViewDogsList.setVisibility(View.GONE);
+            binding.tvListError.setVisibility(View.GONE);
+            binding.progressBarLoadingView.setVisibility(View.VISIBLE);
             listViewModel.byPassRefreshCache();
-            refreshLayout.setRefreshing(false);
+            binding.refreshLayout.setRefreshing(false);
         });
 
-
         observeViewModel();
-
-
-
     }
-
 
     private void observeViewModel() {
         listViewModel.dogs.observe(getViewLifecycleOwner(), dogs -> {
             if (dogs != null && dogs instanceof List){
-                recyclerView.setVisibility(View.VISIBLE);
+                binding.recyclerViewDogsList.setVisibility(View.VISIBLE);
                 adapter.updateDogsList(dogs);
             }
         });
 
         listViewModel.dogsLoadingError.observe(getViewLifecycleOwner(), isError -> {
             if (isError != null && isError instanceof Boolean){
-                tv_listError.setVisibility(isError ? View.VISIBLE : View.GONE);
+                binding.tvListError.setVisibility(isError ? View.VISIBLE : View.GONE);
             }
         });
 
         listViewModel.dogsLoading.observe(getViewLifecycleOwner(), isLoading -> {
             if (isLoading != null && isLoading instanceof Boolean){
-                progressBar_loadingView.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+                binding.progressBarLoadingView.setVisibility(isLoading ? View.VISIBLE : View.GONE);
                 if (isLoading){
-                    tv_listError.setVisibility(View.GONE);
-                    recyclerView.setVisibility(View.GONE);
+                    binding.tvListError.setVisibility(View.GONE);
+                    binding.recyclerViewDogsList.setVisibility(View.GONE);
                 }
-
             }
         });
     }
 
-
-    @Override
-    public void onDogClick(Dog dog, View view) {
-        ListFragmentDirections.ActionDetail action = ListFragmentDirections.actionDetail();
-        action.setDogUuid(dog.uuid);
-        Navigation.findNavController(view).navigate(action);
-
-    }
 }

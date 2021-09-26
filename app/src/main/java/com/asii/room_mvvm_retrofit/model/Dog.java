@@ -1,9 +1,12 @@
 package com.asii.room_mvvm_retrofit.model;
 
+import android.widget.ImageView;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.asii.room_mvvm_retrofit.util.Util;
 import com.google.gson.annotations.SerializedName;
 @Entity(tableName = "table_dog")
 public class Dog {
@@ -36,6 +39,8 @@ public class Dog {
 
     @PrimaryKey(autoGenerate = true)
     public int uuid;
+
+
 
     public Dog(String breedId, String dogBreed, String lifeSpan, String breedGroup,
                String bredFor, String temperament, String imageUrl) {
@@ -103,5 +108,7 @@ public class Dog {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+
 }
 

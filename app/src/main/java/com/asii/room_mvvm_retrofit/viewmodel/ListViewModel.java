@@ -4,29 +4,20 @@ import android.app.Application;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
-import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
-import androidx.room.Database;
 
 import com.asii.room_mvvm_retrofit.model.Dog;
 import com.asii.room_mvvm_retrofit.model.DogDao;
 import com.asii.room_mvvm_retrofit.model.DogDatabase;
 import com.asii.room_mvvm_retrofit.model.DogsApiService;
 import com.asii.room_mvvm_retrofit.util.SharedPreferencesHelper;
-import com.asii.room_mvvm_retrofit.view.DogsListAdapter;
-import com.asii.room_mvvm_retrofit.view.ListFragmentDirections;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
